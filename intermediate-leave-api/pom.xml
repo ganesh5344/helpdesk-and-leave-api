@@ -15,7 +15,7 @@
     <artifactId>leave-management-api</artifactId>
     <version>1.0.0</version>
     <name>leave-management-api</name>
-    <description>ShadowFox Intermediate Task - Employee Leave Management REST API</description>
+    <description>Employee Leave Management REST API</description>
 
     <properties>
         <java.version>17</java.version>

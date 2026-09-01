@@ -1,7 +1,7 @@
-# Intermediate — Employee Leave Management REST API
+# Leave Management API
 
 A Spring Boot REST API for submitting, reviewing, and tracking employee leave
-requests, with an embedded H2 database for zero-setup local evaluation.
+requests, with an embedded H2 database for zero-setup local use.
 
 ## Run it
 
@@ -30,6 +30,7 @@ Controller → Service → Repository → Entity → H2 database
 - `service/` — business rules and validation
 - `controller/` — REST endpoints
 - `dto/` — request payload validation
+- `exception/` — global error handling
 - `config/DataInitializer` — seeds the default admin
 
 ## Endpoints
@@ -92,6 +93,30 @@ Content-Type: application/json
 - Only `PENDING` requests can be reviewed or cancelled
 - Employees can only cancel their own requests
 - Approving a request deducts the day count from the employee's balance
+
+## Role enforcement
+
+Admin endpoints (`/api/admin/**`) require an `X-Admin-Email` header. The value
+must belong to a registered employee whose role is `ADMIN` — any other email
+is rejected with `403 Forbidden`.
+
+## Error responses
+
+```json
+{
+  "timestamp": "2026-09-02T10:15:30Z",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "End date cannot be before start date."
+}
+```
+
+| Situation | Status |
+|---|---|
+| Invalid input / validation failure | 400 Bad Request |
+| Non-admin email on an admin endpoint | 403 Forbidden |
+| Employee or leave request not found | 404 Not Found |
+| Invalid state transition (e.g. reviewing a non-pending request) | 409 Conflict |
 
 A ready-to-import Postman collection is at
 [`postman/Leave-Management-API.postman_collection.json`](./postman/Leave-Management-API.postman_collection.json).

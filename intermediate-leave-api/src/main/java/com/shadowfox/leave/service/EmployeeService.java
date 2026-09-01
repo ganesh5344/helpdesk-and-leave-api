@@ -1,6 +1,7 @@
 package com.shadowfox.leave.service;
 
 import com.shadowfox.leave.model.Employee;
+import com.shadowfox.leave.model.Role;
 import com.shadowfox.leave.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
@@ -30,5 +31,14 @@ public class EmployeeService {
 
     public List<Employee> listAll() {
         return employeeRepository.findAll();
+    }
+
+    public Employee requireAdmin(String email) {
+        Employee employee = employeeRepository.findByEmail(email)
+                .orElseThrow(() -> new SecurityException("No employee found for admin email: " + email));
+        if (employee.getRole() != Role.ADMIN) {
+            throw new SecurityException("Employee '" + email + "' does not have ADMIN privileges.");
+        }
+        return employee;
     }
 }

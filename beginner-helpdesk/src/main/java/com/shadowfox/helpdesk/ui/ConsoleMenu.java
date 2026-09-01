@@ -1,6 +1,8 @@
 package com.shadowfox.helpdesk.ui;
 
+import com.shadowfox.helpdesk.model.Category;
 import com.shadowfox.helpdesk.model.Priority;
+import com.shadowfox.helpdesk.model.Student;
 import com.shadowfox.helpdesk.model.Ticket;
 import com.shadowfox.helpdesk.model.TicketStatus;
 import com.shadowfox.helpdesk.service.TicketService;
@@ -58,14 +60,16 @@ public class ConsoleMenu {
     private void createTicket() {
         System.out.print("Student name: ");
         String name = scanner.nextLine();
+        Student student = ticketService.findOrCreateStudent(name);
+
         System.out.print("Title: ");
         String title = scanner.nextLine();
         System.out.print("Description: ");
         String description = scanner.nextLine();
-        System.out.print("Category: ");
-        String category = scanner.nextLine();
+        Category category = readCategory();
         Priority priority = readPriority();
-        Ticket ticket = ticketService.createTicket(name, title, description, category, priority);
+
+        Ticket ticket = ticketService.createTicket(student, title, description, category, priority);
         System.out.println("Created: " + ticket);
     }
 
@@ -103,13 +107,19 @@ public class ConsoleMenu {
         String title = scanner.nextLine();
         System.out.print("New description (blank to keep current): ");
         String description = scanner.nextLine();
-        System.out.print("New category (blank to keep current): ");
-        String category = scanner.nextLine();
+
+        System.out.print("Update category? (y/n): ");
+        Category category = null;
+        if (scanner.nextLine().trim().equalsIgnoreCase("y")) {
+            category = readCategory();
+        }
+
         System.out.print("Update priority? (y/n): ");
         Priority priority = null;
         if (scanner.nextLine().trim().equalsIgnoreCase("y")) {
             priority = readPriority();
         }
+
         ticketService.updateTicket(id, title, description.isEmpty() ? null : description, category, priority);
         System.out.println("Ticket updated.");
     }
@@ -128,6 +138,18 @@ public class ConsoleMenu {
         }
         ticketService.changeStatus(id, status);
         System.out.println("Status updated.");
+    }
+
+    private Category readCategory() {
+        System.out.println("Category: 1) TECHNICAL 2) ACADEMIC 3) ADMINISTRATIVE 4) HOSTEL 5) OTHER");
+        String choice = scanner.nextLine().trim();
+        switch (choice) {
+            case "1": return Category.TECHNICAL;
+            case "2": return Category.ACADEMIC;
+            case "3": return Category.ADMINISTRATIVE;
+            case "4": return Category.HOSTEL;
+            default: return Category.OTHER;
+        }
     }
 
     private Priority readPriority() {

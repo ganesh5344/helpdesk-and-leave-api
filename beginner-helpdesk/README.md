@@ -1,6 +1,6 @@
-# Beginner — Student Help Desk / Support Ticket System
+# Student Help Desk
 
-A Java console application for logging and tracking student support tickets.
+A Java console application for logging and tracking support tickets.
 
 ## Features
 
@@ -33,6 +33,11 @@ java -cp out com.shadowfox.helpdesk.App
 
 ## Design
 
-- `model/` — `Ticket`, `TicketStatus`, `Priority`
-- `service/TicketService` — business logic and validation
+- `model/` — `Ticket`, `Student`, `Category`, `TicketStatus`, `Priority`
+- `service/TicketService` — business logic, student lookups, and validation
 - `ui/ConsoleMenu` — user interaction loop
+
+Student names are deduplicated: entering the same name twice reuses the same
+`Student` record instead of creating a duplicate. Ticket IDs are assigned from
+a single incrementing counter, so duplicate ticket IDs are impossible by
+construction.

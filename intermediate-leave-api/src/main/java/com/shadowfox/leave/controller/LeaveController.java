@@ -3,6 +3,7 @@ package com.shadowfox.leave.controller;
 import com.shadowfox.leave.dto.CreateLeaveRequest;
 import com.shadowfox.leave.dto.ReviewLeaveRequest;
 import com.shadowfox.leave.model.LeaveRequest;
+import com.shadowfox.leave.service.EmployeeService;
 import com.shadowfox.leave.service.LeaveService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +15,11 @@ import java.util.List;
 public class LeaveController {
 
     private final LeaveService leaveService;
+    private final EmployeeService employeeService;
 
-    public LeaveController(LeaveService leaveService) {
+    public LeaveController(LeaveService leaveService, EmployeeService employeeService) {
         this.leaveService = leaveService;
+        this.employeeService = employeeService;
     }
 
     @PostMapping("/api/employees/{employeeId}/leave-requests")
@@ -38,6 +41,7 @@ public class LeaveController {
 
     @GetMapping("/api/admin/leave-requests")
     public List<LeaveRequest> listAll(@RequestHeader("X-Admin-Email") String adminEmail) {
+        employeeService.requireAdmin(adminEmail);
         return leaveService.listAll();
     }
 
@@ -45,6 +49,7 @@ public class LeaveController {
     public LeaveRequest review(@PathVariable Long leaveId,
                                 @RequestHeader("X-Admin-Email") String adminEmail,
                                 @Valid @RequestBody ReviewLeaveRequest request) {
+        employeeService.requireAdmin(adminEmail);
         return leaveService.review(leaveId, request.getDecision(), request.getComment());
     }
 }

@@ -2,17 +2,17 @@ package com.shadowfox.helpdesk.model;
 
 public class Ticket {
     private final int id;
-    private String studentName;
+    private final Student student;
     private String title;
     private String description;
-    private String category;
+    private Category category;
     private Priority priority;
     private TicketStatus status;
 
-    public Ticket(int id, String studentName, String title, String description,
-                  String category, Priority priority) {
+    public Ticket(int id, Student student, String title, String description,
+                  Category category, Priority priority) {
         this.id = id;
-        this.studentName = studentName;
+        this.student = student;
         this.title = title;
         this.description = description;
         this.category = category;
@@ -21,24 +21,24 @@ public class Ticket {
     }
 
     public int getId() { return id; }
-    public String getStudentName() { return studentName; }
+    public Student getStudent() { return student; }
     public String getTitle() { return title; }
     public String getDescription() { return description; }
-    public String getCategory() { return category; }
+    public Category getCategory() { return category; }
     public Priority getPriority() { return priority; }
     public TicketStatus getStatus() { return status; }
 
     public void setTitle(String title) { this.title = title; }
     public void setDescription(String description) { this.description = description; }
-    public void setCategory(String category) { this.category = category; }
+    public void setCategory(Category category) { this.category = category; }
     public void setPriority(Priority priority) { this.priority = priority; }
     public void setStatus(TicketStatus status) { this.status = status; }
 
     @Override
     public String toString() {
         return String.format(
-            "#%d [%s] %s | Student: %s | Category: %s | Priority: %s | Status: %s",
-            id, status, title, studentName, category, priority, status
+            "#%d [%s] %s | Student: %s | Category: %s | Priority: %s",
+            id, status, title, student.getName(), category, priority
         );
     }
 
