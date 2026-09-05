@@ -1,0 +1,20 @@
+# Java
+*.class
+out/
+target/
+
+# Maven
+.mvn/wrapper/maven-wrapper.jar
+.m2/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Help Desk runtime data
+beginner-helpdesk/helpdesk-data.ser
+
+# OS
+.DS_Store
+Thumbs.db
