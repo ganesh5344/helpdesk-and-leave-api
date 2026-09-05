@@ -1,0 +1,74 @@
+{
+  "info": {
+    "name": "Leave Management API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "employeeId", "value": "1" },
+    { "key": "leaveId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Register Employee",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/employees",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Ganesh Goud\",\n  \"email\": \"ganesh@example.com\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Submit Leave Request",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/employees/{{employeeId}}/leave-requests",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"startDate\": \"2026-09-10\",\n  \"endDate\": \"2026-09-12\",\n  \"reason\": \"University examination\"\n}"
+        }
+      }
+    },
+    {
+      "name": "View Leave History",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/employees/{{employeeId}}/leave-requests"
+      }
+    },
+    {
+      "name": "Admin - View All Requests",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "X-Admin-Email", "value": "admin@example.com" }],
+        "url": "{{baseUrl}}/api/admin/leave-requests"
+      }
+    },
+    {
+      "name": "Admin - Approve/Reject Request",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "X-Admin-Email", "value": "admin@example.com" }
+        ],
+        "url": "{{baseUrl}}/api/admin/leave-requests/{{leaveId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"decision\": \"APPROVED\",\n  \"comment\": \"Approved for testing.\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Cancel Leave Request",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/api/employees/{{employeeId}}/leave-requests/{{leaveId}}"
+      }
+    }
+  ]
+}
